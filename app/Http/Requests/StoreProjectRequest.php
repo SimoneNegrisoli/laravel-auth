@@ -11,7 +11,7 @@ class StoreProjectRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,19 @@ class StoreProjectRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'title' => ['required', 'min:3', 'max:255', 'unique:projects'],
+            'body' => ['nullable'],
+            'image' => ['nullable', 'url']
+        ];
+    }
+    public function messages()
+    {
+        return [
+            'title.required' => 'Il titolo è obbligatorio',
+            'title.min' => 'Il titolo deve avere di almeno :min caratteri',
+            'title.max' => 'Il titolo deve avere massimo di :max caratteri',
+            'title.unique' => 'Questo titolo esiste già',
+            'image.url' => 'L\'immagine deve essere di tipo url'
         ];
     }
 }
