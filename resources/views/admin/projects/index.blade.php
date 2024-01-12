@@ -14,11 +14,11 @@
                         <td class="d-flex justify-content-end align-items-center">
                             <a href="{{ route('admin.projects.show', $project->id) }}" class="btn btn-success mx-2">Mostra</a>
 
-                            <form action="{{ route('admin.projects.destroy', $project->id) }}">
+                            <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="cancel-button" data-item-title="{{ $project->id }}"><i
-                                        class="fa-solid fa-trash-can"></i></button>
+                                <button type="submit" class="btn btn-primary cancel-button"
+                                    data-item-title="{{ $project->title }}"><i class="fa-solid fa-trash-can"></i></button>
                             </form>
                         </td>
                     </tr>
