@@ -1,11 +1,31 @@
 @extends('layouts.app')
 @section('content')
     <section class="container">
-        <h1>Projects</h1>
-        @foreach ($projects as $item)
-            <p><a href="{{ route('admin.projects.show', $item->id) }}">
-                    {{ $item->title }}
-                </a></p>
-        @endforeach
+        <div class="d-flex justify-content-between ">
+            <h1>Projects</h1>
+            <a href="{{ route('admin.projects.create') }}" class="btn btn-success ">Aggiungi nuovo progetto</a>
+        </div>
+        <table class="table">
+            <tbody>
+
+                @foreach ($projects as $key => $project)
+                    <tr>
+                        <td>{{ $project->title }}</td>
+                        <td class="d-flex justify-content-end align-items-center">
+                            <a href="{{ route('admin.projects.show', $project->id) }}" class="btn btn-success mx-2">Mostra</a>
+
+                            <form action="{{ route('admin.projects.destroy', $project->id) }}">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="cancel-button" data-item-title="{{ $project->id }}"><i
+                                        class="fa-solid fa-trash-can"></i></button>
+                            </form>
+                        </td>
+                    </tr>
+                @endforeach
+
+            </tbody>
+        </table>
     </section>
+    @include('partials.modal_delete');
 @endsection
