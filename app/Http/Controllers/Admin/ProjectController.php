@@ -8,6 +8,9 @@ use App\Http\Requests\UpdateProjectRequest;
 use App\Models\Project;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+
+use App\Models\Post;
 
 
 
@@ -45,6 +48,11 @@ class ProjectController extends Controller
         $userId = Auth::id();
         $formData['user_id'] = $userId;
 
+        if ($request->hasFile('image')) {
+            $path = Storage::put('images', $formData['image']);
+            $formData['image'] = $path;
+        }
+
         $project = Project::create($formData);
         return redirect()->route('admin.projects.show', $project->id);
 
@@ -72,12 +80,20 @@ class ProjectController extends Controller
     public function update(UpdateProjectRequest $request, Project $project)
     {
         $formData = $request->validated();
-
-        $slug = Str::slug($formData['title'], '-');
+        if ($project->title !== $formData['title']) {
+            $slug = Post::getSlug($formData['title']);
+        }
         $formData['slug'] = $slug;
 
 
         $formData['user_id'] = $project->user_id;
+        if ($request->hasFile('image')) {
+            if ($project->image) {
+                Storage::delete($project->image);
+            }
+            $path = Storage::put('images', $formData['image']);
+            $formData['image'] = $path;
+        }
 
         $project->update($formData);
         return redirect()->route('admin.projects.show', $project->id);
@@ -88,6 +104,10 @@ class ProjectController extends Controller
      */
     public function destroy(Project $project)
     {
+        if ($project->image) {
+            Storage::delete($project->image);
+        }
+
         $project->delete();
         return to_route('admin.projects.index')->with('message', "$project->title eliminato con successo");
     }

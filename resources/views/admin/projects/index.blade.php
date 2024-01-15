@@ -11,9 +11,10 @@
                     <tr>
                         <td class="align-middle">{{ $project->title }}</td>
                         <td class="d-flex justify-content-end align-items-center">
-                            <a href="{{ route('admin.projects.show', $project->id) }}" class="btn btn-success mx-2">Mostra</a>
+                            <a href="{{ route('admin.projects.show', $project->slug) }}"
+                                class="btn btn-success mx-2">Mostra</a>
 
-                            <form action="{{ route('admin.projects.destroy', $project->id) }}" method="POST">
+                            <form action="{{ route('admin.projects.destroy', $project->slug) }}" method="POST">
                                 @csrf
                                 @method('DELETE')
                                 <button type="submit" class="btn btn-primary cancel-button"
