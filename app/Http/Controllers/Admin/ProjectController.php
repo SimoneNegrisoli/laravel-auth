@@ -54,7 +54,7 @@ class ProjectController extends Controller
         }
 
         $project = Project::create($formData);
-        return redirect()->route('admin.projects.show', $project->id);
+        return redirect()->route('admin.projects.show', $project->slug);
 
     }
 
